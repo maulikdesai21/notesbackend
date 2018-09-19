@@ -32,9 +32,11 @@
   "license": "MIT",
   "dependencies": {
     "body-parser": "^1.13.3",
+    "chalk": "^2.4.1",
     "compression": "^1.5.2",
     "cors": "^2.7.1",
     "express": "^4.13.3",
+    "mongoose": "^5.2.15",
     "morgan": "^1.8.0",
     "resource-router-middleware": "^0.6.0"
   },

@@ -2,5 +2,6 @@
 	"port": 8081,
 	"bodyLimit": "100kb",
   "corsHeaders": ["Link"],
-  "dbUrl":"mongodb://appUser:Mongo123@ds133338.mlab.com:33338/notesdb"
+  "dbUrl":"mongodb://appUser:Mongo123@ds133338.mlab.com:33338/notesdb",
+  "noteType":["RICH_TEXT","TODO"]
 }

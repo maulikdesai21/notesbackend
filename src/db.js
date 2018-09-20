@@ -8,7 +8,6 @@ const disconnected = chalk.bold.red;
 const termination = chalk.bold.magenta;
 export default callback => {
   // connect to a database if needed, then pass it to `callback`:
-  console.log('I am called')
   mongoose.connect(dbUrl);
 
   mongoose.connection.on("connected", function() {

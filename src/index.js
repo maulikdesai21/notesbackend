@@ -27,7 +27,7 @@ app.use(bodyParser.json({
 initializeDb( () => {
 
 	// internal middleware
-	app.use(middleware({ config }));
+	app.use(middleware());
 
 	// api router
 	app.use('/api', api({ config }));

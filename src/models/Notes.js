@@ -7,7 +7,7 @@ const NotesSchema = new mongoose.Schema({
     enum:config.noteType
   },
   plainText: String,
-  richTest: String,
+  richText: String,
   tags:[],
   access: []
 })

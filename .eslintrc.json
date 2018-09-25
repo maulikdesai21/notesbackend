@@ -1,0 +1,14 @@
+{
+    "extends": "airbnb-base",
+    "plugins": [
+        "import"
+    ],
+    "parserOptions": {
+      "sourceType": "module",
+      "ecmaVersion": 8,
+      "ecmaFeatures": {
+          "jsx": true,
+          "experimentalObjectRestSpread": true
+      }
+  }
+}

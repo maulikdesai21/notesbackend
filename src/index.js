@@ -66,6 +66,28 @@ initializeDb( () => {
       }
     })();
   });
+  app.post('/createUser',(req,res)=>{
+    const { name, email, password } = req.body;
+    if (!name || !email || !password) {
+      res.status(400).json({
+        message: "Required Parameters Missing"
+      });
+    }
+    let newUser = new User({
+      name,
+      email,
+      password
+    });
+    (async () => {
+      try {
+        let result = await newUser.save();
+        res.status(200).json(result);
+      } catch (err) {
+        console.log(err);
+        res.status(500).send();
+      }
+    })();
+  })
   // internal middleware for Token Validation 
   app.use('/api/v1/', checkToken);
 	

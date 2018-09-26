@@ -21,8 +21,8 @@ export default () =>
     /** GET / - List all entities */
     index(req, res) {
       const { headers } = req;
-      const {_id} = req.decoded;
-      
+      const { _id } = req.decoded;
+
       if (!_id) {
         res.status(400).json({
           message: "Required Parameters Missing"
@@ -32,12 +32,11 @@ export default () =>
         try {
           if (_id.match(/^[0-9a-fA-F]{24}$/)) {
             // Yes, it's a valid ObjectId, proceed with `find` call.
-            const result = await Note.find({ user:_id});
+            const result = await Note.find({ user: _id });
             res.status(200).send(result);
-          }else{
+          } else {
             res.status(500).send();
           }
-         
         } catch (err) {
           console.log(err);
           res.status(500).send();
@@ -48,7 +47,7 @@ export default () =>
     /** POST / - Create a new entity */
     create(req, res) {
       const { headers, body } = req;
-      const {_id} = req.decoded;
+      const { _id } = req.decoded;
       const { noteType, plainText, richText, tags } = body;
       if (!noteType || !_id) {
         res.status(400).json({
@@ -56,7 +55,7 @@ export default () =>
         });
       }
       let newNote = new Note({
-        user:_id,
+        user: _id,
         noteType,
         plainText,
         richText,
@@ -102,12 +101,52 @@ export default () =>
     delete({ note }, res) {
       console.log(note);
       (async () => {
-        try{
-         const result = note.remove();
-         res.status(200).send()
-        }catch(err){
+        try {
+          const result = note.remove();
+          res.status(200).send();
+        } catch (err) {
           res.status(500).send();
         }
       })();
     }
+  }).post("/notes/postNotes", (req, res) => {
+    const { headers, body } = req;
+    const { _id } = req.decoded;
+    const notes = [];
+    if (!_id) {
+      res.status(400).json({
+        message: "Required Parameters Missing"
+      });
+    }
+    if (req.body.length > 0) {
+      for (let note of req.body) {
+        notes.push({
+          tags: note.tags,
+          plainText: note.plainText,
+          noteType: note.noteType,
+          richText: JSON.stringify(note.richText),
+          lastUpdated: note.lastUpdated,
+          user: _id
+        });
+      }
+      (async () => {
+        try {
+          await Note.insertMany(notes);
+        } catch (err) {
+          console.log(err);
+          res.send(500);
+        }
+      })();
+    }
+    (async () => {
+      try {
+        let userNotes = await Note.find({
+          user: _id
+        });
+        res.status(200).json(userNotes);
+      } catch (err) {
+        console.log(err);
+        res.send(500);
+      }
+    })();
   });

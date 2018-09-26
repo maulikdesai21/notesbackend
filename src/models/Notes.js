@@ -9,7 +9,8 @@ const NotesSchema = new mongoose.Schema({
   plainText: String,
   richText: String,
   tags:[],
-  access: []
+  access: [],
+  lastUpdated:String
 })
 
 export default mongoose.model('Note', NotesSchema);

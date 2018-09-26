@@ -44,7 +44,6 @@ initializeDb( () => {
           email:userName,
           password
         });
-        console.log(dbUser);
         if(dbUser){
           let token = jwt.sign({userName: dbUser.email,_id:dbUser._id},
             config.secret,

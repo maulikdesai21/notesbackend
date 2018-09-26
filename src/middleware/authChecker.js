@@ -11,7 +11,7 @@ export function checkToken(req, res, next) {
     }
     jwt.verify(token, config.secret, (err, decoded) => {
       if (err) {
-        return res.json({
+        return res.status(401).json({
           success: false,
           message: "Token is not valid"
         });
@@ -21,7 +21,7 @@ export function checkToken(req, res, next) {
       }
     });
   } else {
-    return res.json({
+    return res.status(401).json({
       success: false,
       message: "Auth token is not supplied"
     });

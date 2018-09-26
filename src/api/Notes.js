@@ -58,7 +58,7 @@ export default () =>
         user: _id,
         noteType,
         plainText,
-        richText,
+        richText:JSON.stringify(richText),
         tags
       });
       (async () => {
@@ -81,29 +81,50 @@ export default () =>
 
     /** GET /:id - Return a given entity */
     read({ facet }, res) {
-      console.log("This is read");
-
       res.json(facet);
     },
 
     /** PUT /:id - Update a given entity */
-    update({ note, body }, res) {
-      console.log("This is update");
-      for (let key in body) {
-        if (key !== "id") {
-          facet[key] = body[key];
-        }
+    update(req, res) {
+      const { headers, body } = req;
+      const { _id } = req.decoded;
+      const { noteType, plainText, richText, tags,id } = body;
+      if (!noteType || !_id) {
+        res.status(400).json({
+          message: "Required Parameters Missing"
+        });
       }
-      res.sendStatus(204);
+
+      (async () => {
+        try {
+          let oldNote = await Note.findById(id);
+          oldNote.user = _id;
+          oldNote.noteType = noteType;
+          oldNote.plainText =  plainText;
+          oldNote.richText = JSON.stringify(richText);
+          oldNote.tags = tags;
+          let note = await oldNote.save();
+          res.status(200).json(note);
+        } catch (err) {
+          switch (err.name) {
+            case "ValidationError":
+              res.status(400).json({
+                message: "Bad Request"
+              });
+              break;
+            default:
+              res.status(500).send();
+          }
+        }
+      })();
     },
 
     /** DELETE /:id - Delete a given entity */
     delete({ note }, res) {
-      console.log(note);
       (async () => {
         try {
           const result = note.remove();
-          res.status(200).send();
+          res.status(200).send(result);
         } catch (err) {
           res.status(500).send();
         }
